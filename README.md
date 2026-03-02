@@ -1,2 +1,2 @@
 # iHungry
-Projeto de PPO sobre ...
+Projeto de PPO sobre site que tem como objetivo principal atender restaurantes que não possuem um site próprio
