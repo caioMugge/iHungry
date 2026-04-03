@@ -9,6 +9,6 @@
     <a href="{{ route('user.create')}}">Cadastrar</a>
 
     <h2>Listar Usuários</h2>
-    
+
 </body>
 </html>
