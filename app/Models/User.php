@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Endereco;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -16,10 +15,10 @@ class User extends Authenticatable
         'tipo',
     ];
 
-    public function enderecos()
-    {
-        return $this->hasMany(Endereco::class);
-    }
+    // public function enderecos()
+    // {
+    //     return $this->hasMany(Endereco::class);
+    // }
 }
 
 

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Endereco extends Model
+class Pedido extends Model
 {
     //
 }
