@@ -3,8 +3,12 @@
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
+// Route::get('/', function () {
+//     return redirect()->route('login');
+// });
+
 Route::get('/', function () {
-    return redirect()->route('login');
+    return view('welcome');
 });
 
 Route::get('/dashboard', function () {
