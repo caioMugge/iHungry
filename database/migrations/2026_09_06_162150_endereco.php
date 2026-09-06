@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('avaliacoes', function (Blueprint $table) {
-            $table->id();
+        Schema::create('endereco', function (Blueprint $table) {
+            $table->id('endereco_id');
+            $table->string('endereco_rua', 150);
+            $table->string('endereco_bairro', 150);
+            $table->string('endereco_numero', 150);
+            $table->text('endereco_complemmento');
             $table->timestamps();
         });
     }
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('avaliacoes');
+        Schema::dropIfExists('endereco');
     }
 };
