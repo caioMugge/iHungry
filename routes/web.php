@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
@@ -10,6 +11,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// TESTE ROUTE COM CONTROLLER
+// Route::resource('produtos', ProdutoController::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
