@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Endereco;
 
 class EnderecoController extends Controller
 {
@@ -11,7 +12,8 @@ class EnderecoController extends Controller
      */
     public function index()
     {
-        //
+        $enderecos = Endereco::all();
+        return dd($enderecos);
     }
 
     /**
