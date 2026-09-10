@@ -6,7 +6,8 @@ use App\Models\Endereco;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use User;
+use App\Models\User;
+// use User;
 
 class UserController extends Controller
 {
@@ -53,7 +54,7 @@ class UserController extends Controller
                     'endereco_complemento' => $request->endereco_complemento,
                 ]);
                 User::create([
-                    'id_endereco' => $endereco->id_endereco,
+                    'endereco_id' => $endereco->endereco_id,
                     'nome_usuario' => $request->nome_usuario,
                     'email' => $request->email,
                     'senha' => Hash::make($request->senha),
@@ -62,8 +63,11 @@ class UserController extends Controller
                 ]);
             });
             return redirect()->route('home')->with('success', 'Usuário cadastrado com sucesso!');
-        } catch(\Illuminate\Database\QueryException $e) {
-            return back()->withErrors(['erro' => 'Erro ao cadastrar usuário.'])->withInput();
+        // } catch(\Illuminate\Database\QueryException $e) {
+        //     return back()->withErrors(['erro' => 'Erro ao cadastrar usuário.'])->withInput();
+       
+        }catch(\Illuminate\Database\QueryException $e) {
+         dd($e->getMessage());
         }
     }
 

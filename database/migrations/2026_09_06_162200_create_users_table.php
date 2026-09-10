@@ -14,12 +14,12 @@ return new class extends Migration{
             $table->foreignId('endereco_id')
                 ->constrained('endereco', 'endereco_id')
                 ->cascadeOnDelete();
-            $table->string('name');
+            $table->string('nome_usuario');
             $table->string('email')->unique();
             // $table->timestamp('email_verified_at')->nullable();
-            $table->string('password', 255);
+            $table->string('senha', 255);
             $table->string('telefone', 20);
-            $table->boolean('tipo');
+            $table->string('tipo', 100);
             // $table->rememberToken();
             $table->timestamps();
         });

@@ -1,5 +1,9 @@
 <h2>Cadastrar categoria</h2>
 
+@if (session()->has('message'))
+    {{ session()->get('message') }}
+@endif
+
 <form action="{{ route('categorias.store') }}" method="POST">
     @csrf
     <label for="nome_categoria">categoria: </label>

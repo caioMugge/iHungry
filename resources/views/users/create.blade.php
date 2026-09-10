@@ -2,6 +2,8 @@
 
 @section('content')
 
+@if ($errors->any()) <div> <ul> @foreach ($errors->all() as $error) <li>{{ $error }}</li> @endforeach </ul> </div> @endif
+
 <h2>Cadastrar</h2>
 
 <form action="{{ route('users.store') }}" method="POST">

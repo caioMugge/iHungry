@@ -8,6 +8,8 @@ class Endereco extends Model
 {
     protected $table = 'endereco';
 
+    protected $primaryKey = 'endereco_id';
+
     protected $fillable = [
         'endereco_rua',
         'endereco_bairro',
