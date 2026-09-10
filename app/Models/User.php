@@ -3,9 +3,11 @@
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class User extends Authenticatable
+class User extends Authenticatable;
 {
     use HasFactory;
+
+    protected $table = 'user';
 
     protected $fillable = [
         'nome_usuario',
