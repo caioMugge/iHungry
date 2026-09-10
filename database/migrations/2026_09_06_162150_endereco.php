@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('endereco_rua', 150);
             $table->string('endereco_bairro', 150);
             $table->string('endereco_numero', 150);
-            $table->text('endereco_complemmento');
+            $table->text('endereco_complemento');
             $table->timestamps();
         });
     }

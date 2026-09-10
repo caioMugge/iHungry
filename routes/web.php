@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\UserController;
@@ -10,6 +11,11 @@ use Illuminate\Support\Facades\Route;
 // FEITO PARA SER O OFICIAL
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+//CATEGORIAS
+Route::get('categorias/create', [CategoriaController::class, 'create'])->name('categorias.create');
+Route::post('/categorias', [CategoriaController::class, 'store'])->name('categorias.store');
+
+// PRODUTOS
 Route::resource('produtos', ProdutoController::class);
 // Route::get('/produtos', [ProdutoController::class, 'index'])->name('produtos.index');
 // Route::get('/produtos/create', [ProdutoController::class, 'create'])->name('produtos.create');
@@ -19,8 +25,10 @@ Route::resource('produtos', ProdutoController::class);
 // Route::put('/produtos/{produto}', [ProdutoController::class, 'update'])->name('produtos.update');
 // Route::delete('/produtos/{produto}', [ProdutoController::class, 'destroy'])->name('produtos.destroy');
 
+// USUARIOS
 Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
 Route::post('/users', [UserController::class, 'store'])->name('users.store');
+
 
 
 

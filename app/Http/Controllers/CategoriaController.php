@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
 use Illuminate\Http\Request;
 
 class CategoriaController extends Controller
@@ -19,7 +20,7 @@ class CategoriaController extends Controller
      */
     public function create()
     {
-        //
+        return view('categorias.create');
     }
 
     /**
@@ -27,7 +28,15 @@ class CategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $created = Categoria::create([
+            'nome_categoria' => $request->nome_categoria,
+            'descricao_categoria' =>$request->descricao_categoria,
+        ]);
+
+        if ($created) {
+            return redirect()->back()->with('message', 'Cadastro de produto concluído!');
+        }
+        return redirect()->back()->with('message', 'Cadastro de produto falhou!');
     }
 
     /**

@@ -1,16 +1,18 @@
 <?php
 
-use Illuminate\Contracts\Auth\Authenticatable;
+// use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class User extends Authenticatable;
+class User extends Authenticatable
 {
     use HasFactory;
 
-    protected $table = 'user';
+    protected $table = 'users';
 
     protected $fillable = [
         'nome_usuario',
+        'endereco_id',
         'email',
         'senha',
         'telefone',

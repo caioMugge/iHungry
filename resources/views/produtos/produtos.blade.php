@@ -3,6 +3,7 @@
 @section('content')
 
 <a href="{{ route('produtos.create') }}">Adicionar produto</a>
+<a href="{{ route('categorias.create') }}">Adicionar categoria</a>
 
 <hr>
 
