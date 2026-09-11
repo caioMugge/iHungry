@@ -20,11 +20,11 @@
     <label for="telefone">Telefone: </label>
     <input type="tel" name="telefone" id="telefone" placeholder="(XX) XXXXX-XXXX">
 
-    <label for="tipo">Tipo de conta: </label>
+    {{-- <label for="tipo">Tipo de conta: </label>
     <select name="tipo">
         <option value="admin">Administrador</option>
         <option value="usuario" selected>Usuário</option>
-    </select>
+    </select> --}}
 
     <h3>Endereço</h3>
 

@@ -9,6 +9,8 @@ class User extends Authenticatable
 {
     use HasFactory;
 
+    protected $primaryKey = 'user_id';
+
     protected $table = 'users';
 
     protected $fillable = [
@@ -19,6 +21,13 @@ class User extends Authenticatable
         'telefone',
         'tipo',
     ];
+
+    protected $hidden = ['senha'];
+
+    public function getAuthPassword()
+    {
+        return $this->senha;
+    }
 
     // public function enderecos()
     // {

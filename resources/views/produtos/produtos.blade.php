@@ -2,6 +2,10 @@
 
 @section('content')
 
+<a href="{{ url()->previous() }}">
+        Voltar
+    </a>
+
 <a href="{{ route('produtos.create') }}">Adicionar produto</a>
 <a href="{{ route('categorias.create') }}">Adicionar categoria</a>
 

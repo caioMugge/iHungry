@@ -59,16 +59,15 @@ class UserController extends Controller
                     'email' => $request->email,
                     'senha' => Hash::make($request->senha),
                     'telefone' => $request->telefone,
-                    'tipo' => $request->tipo,
+                    'tipo' => 'usuario',
                 ]);
             });
             return redirect()->route('home')->with('success', 'Usuário cadastrado com sucesso!');
-        // } catch(\Illuminate\Database\QueryException $e) {
-        //     return back()->withErrors(['erro' => 'Erro ao cadastrar usuário.'])->withInput();
+        } catch(\Illuminate\Database\QueryException $e) {
+            return back()->withErrors(['erro' => 'Erro ao cadastrar usuário.'])->withInput();
        
-        }catch(\Illuminate\Database\QueryException $e) {
-         dd($e->getMessage());
         }
+        
     }
 
     /**
