@@ -57,6 +57,35 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
-README
+README iHungry
 
-comando alias para reduzir ./vendor/bin/sail: alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
+Como rodar o projeto
+
+Clonar o repositório:
+git clone https://github.com/caioMugge/iHungry.git
+cd ihungry
+
+Copiar o arquivo de ambiente:
+cp .env.example .env
+
+comando alias para reduzir ./vendor/bin/sail:
+alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
+
+Subir os containers com o Sail:
+sail up -d
+
+Gerar a chave da aplicação:
+sail artisan key:generate
+
+Rodar as migrations:
+sail artisan migrate
+
+Rodar o seeder (cria o usuário admin):
+sail artisan db:seed
+
+Acessar no navegador:
+http://localhost:8080
+
+Login do admin
+E-mail: admin@admin.com
+Senha: administrador

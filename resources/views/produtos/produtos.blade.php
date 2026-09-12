@@ -2,7 +2,7 @@
 
 @section('content')
 
-<a href="{{ url()->previous() }}">
+<a href="{{ route('home') }}">
         Voltar
     </a>
 
