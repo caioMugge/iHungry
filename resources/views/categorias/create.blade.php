@@ -1,3 +1,7 @@
+@extends('layouts.master')
+
+@section('content')
+
 <h2>Cadastrar categoria</h2>
 
 @if (session()->has('message'))
@@ -16,3 +20,5 @@
     <button type="submit">Cadastrar</button>
 
 </form>
+
+@endsection

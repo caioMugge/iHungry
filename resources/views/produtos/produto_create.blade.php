@@ -8,7 +8,7 @@
     {{ session()->get('message') }}
 @endif
 
-<form action="{{ route('produtos.store') }}" method="post">
+<form action="{{ route('produtos.store') }}" enctype="multipart/form-data" method="post">
     {{-- FALTA ADICIONAR A PARTE DAS CATEGORIAS --}}
     @csrf
     <input type="text" name="nome_produto" placeholder="Nome do produto">
@@ -23,11 +23,13 @@
     </select>
     <textarea name="descricao_produto" placeholder="Descrição do produto"></textarea>
     <input type="number" name="preco" step="0.01" min="0" placeholder="Preço">
-    <input type="text" name="imagem" placeholder="Imagem do produto">
+    {{-- <input type="text" name="imagem" placeholder="Imagem do produto"> --}}
+    <label for="imagem">Imagem do Produto:</label>
+    <input type="file" name="imagem" id="imagem">
     <label for="promocao">Promoção ativa:</label>
-    <input type="checkbox" name="promocao">
+    <input type="checkbox" name="promocao" id="promocao" value="1">
     <label for="ativo">Produto disponível:</label>
-    <input type="checkbox" name="ativo">
+    <input type="checkbox" name="ativo" id="ativo" value="1">
     <button type="submit">Registrar</button>
 </form>
 

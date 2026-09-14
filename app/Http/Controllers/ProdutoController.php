@@ -41,12 +41,15 @@ class ProdutoController extends Controller
             'ativo' => $request->has('ativo'),
         ]);
 
+        $file_name = rand(0, 999999) . "-" . $request->file('imagem')->getClientOriginalName();
+        $path = $request->file('imagem')->storeAs('uploads', $file_name, 'public');
+
         $created = $this->produto->create([
                 'nome_produto' => $request->input('nome_produto'),
                 'categoria_id' => $request->input('categoria_id'),
                 'descricao_produto' => $request->input('descricao_produto'),
                 'preco' => $request->input('preco'),
-                'imagem' => $request->input('imagem'),
+                'imagem' => $path,
                 'promocao' => $request->input('promocao'),
                 'ativo' => $request->input('ativo'),
             ]
