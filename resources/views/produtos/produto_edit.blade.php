@@ -11,7 +11,8 @@
 <form action="{{ route('produtos.update', ['produto' => $produto->produto_id]) }}" method="post">
     {{-- FALTA ADICIONAR A PARTE DAS CATEGORIAS --}}
     @csrf
-    <input type="hidden" name="_method" value="PUT">
+    {{-- <input type="hidden" name="_method" value="PUT"> --}}
+    @method('PUT')
     <input type="text" name="nome_produto" value="{{ $produto->nome_produto }}">
     <textarea name="descricao_produto">{{ $produto->descricao_produto }}</textarea>
     <input type="number" name="preco" step="0.01" min="0" value="{{ $produto->preco }}">

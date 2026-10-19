@@ -6,7 +6,8 @@
 
 <form action="{{ route('produtos.destroy', ['produto' => $produto->produto_id]) }}" method="post">
      @csrf
-    <input type="hidden" name="_method" value="DELETE">
+    {{-- <input type="hidden" name="_method" value="DELETE"> --}}
+    @method('DELETE')
     <button type="submit">Exluír</button>
 </form>
 

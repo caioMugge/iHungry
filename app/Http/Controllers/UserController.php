@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+
 // use User;
 
 class UserController extends Controller
@@ -46,14 +48,23 @@ class UserController extends Controller
         ]);
 
         try {
-            DB::transaction(function () use($request) {
+            $user = null; // ADICIONEI ESSA LINHA 
+            DB::transaction(function () use($request, &$user ) { // MUDEI AQUI
                 $endereco = Endereco::create([
                     'endereco_rua' => $request->endereco_rua,
                     'endereco_bairro' => $request->endereco_bairro,
                     'endereco_numero' => $request->endereco_numero,
                     'endereco_complemento' => $request->endereco_complemento,
                 ]);
-                User::create([
+                // User::create([
+                //     'endereco_id' => $endereco->endereco_id,
+                //     'nome_usuario' => $request->nome_usuario,
+                //     'email' => $request->email,
+                //     'senha' => Hash::make($request->senha),
+                //     'telefone' => $request->telefone,
+                //     'tipo' => 'usuario',
+                // ]);
+                $user = User::create([ // ADICIONEI ESSA VARIAVEL
                     'endereco_id' => $endereco->endereco_id,
                     'nome_usuario' => $request->nome_usuario,
                     'email' => $request->email,
@@ -62,11 +73,14 @@ class UserController extends Controller
                     'tipo' => 'usuario',
                 ]);
             });
+
+            Auth::login($user); // ADICIONEI ESTA LINHA PARA FAZER O USUARIO FICAR AUTOMATICAMENTE LOGADO AO SE CADASTRAR
             return redirect()->route('home')->with('success', 'Usuário cadastrado com sucesso!');
         } catch(\Illuminate\Database\QueryException $e) {
             return back()->withErrors(['erro' => 'Erro ao cadastrar usuário.'])->withInput();
        
         }
+
         
     }
 

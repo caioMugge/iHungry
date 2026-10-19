@@ -1,6 +1,8 @@
 <?php
 
+use App\Facades\Cart;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProdutoController;
@@ -8,8 +10,6 @@ use App\Http\Controllers\UserController;
 
 use Illuminate\Support\Facades\Route;
 
-
-// FEITO PARA SER O OFICIAL
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 //CATEGORIAS
@@ -34,6 +34,11 @@ Route::get('/login', [AuthController::class, 'create'])->name('login');
 Route::post('/login', [AuthController::class, 'store'])->name('login.store');
 Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
 
+
+// CARRINHO
+Route::post('/cart/add', [CartController::class, 'add_to_cart'])->name('cart.add');
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::put('/cart/update', [CartController::class, 'update_cart'])->name('cart.update');
 
 
 

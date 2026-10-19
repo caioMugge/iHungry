@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('descricao_produto');
             $table->decimal('preco', total: 10, places: 2);
             $table->string('imagem', 255);
-            $table->boolean('promocao');
+            $table->boolean('promocao')->nullable();
             $table->boolean('ativo');
             $table->timestamps();
         });
