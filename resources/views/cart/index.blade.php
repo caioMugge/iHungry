@@ -62,7 +62,7 @@
                                         @csrf
                                         @method('PUT')
                                         <input type="hidden" name="rowId" value="{{ $item->rowId }}">
-                                        <input type="text" name="valor" value="R${{ number_format($item->preco, 2) }}" readonly>
+                                        {{-- <input type="text" name="valor" value="R${{ number_format($item->preco, 2) }}" readonly> --}}
                                         <div>
                                             {{-- <button type="submit" onclick="updateQuantidade(this, -1)">-</button> --}}
                                             <button type="submit" name="acao" value="diminuir">-</button>
@@ -70,17 +70,26 @@
                                             {{-- <button type="submit" onclick="updateQuantidade(this, 1)">+</button> --}}
                                             <button type="submit" name="acao" value="aumentar">+</button>
                                         </div>
-                                        <input type="text" name="valorTotal" value="R${{ number_format($item->subtotal, 2) }}" readonly>
+                                        {{-- <input type="text" name="valorTotal" value="R${{ number_format($item->subtotal, 2) }}" readonly> --}}
                                     </form>
                                 </td>
                                 <td>R${{ number_format($item->subtotal, 2, ',', '.') }}</td>
                                 <td>
-                                    <button><i></i></button>
+                                    <form action="{{ route('cart.remove', $item->rowId) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"><i>Delete</i></button>
+                                    </form>
                                 </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    <form action="{{ route('cart.clear', $item->rowId) }}" method="POST">
+                        @csrf
+                        @method('DELETE') 
+                        <button type="submit" href="#">Limpar Carrinho</button>
+                    </form>
                 </div>
             </div>
             @endif

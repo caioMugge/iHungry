@@ -55,4 +55,16 @@ class CartController extends Controller
         );
         return back()->with('success', 'Carrinho atualizado com sucesso!');
     }
+
+    public function remove_from_cart(string $rowId)
+    {
+        Cart::instance('cart')->remove($rowId);
+        return back()->with('success', 'Item removido do carrinho com sucesso');
+    }
+
+    public function clear_cart()
+    {
+        Cart::instance('cart')->destroy();
+        return back()->with('success', 'Todos os itens do carrinho foram removidos');
+    }
 }
