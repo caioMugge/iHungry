@@ -75,7 +75,7 @@
                                 </td>
                                 <td>R${{ number_format($item->subtotal, 2, ',', '.') }}</td>
                                 <td>
-                                    <form action="{{ route('cart.remove', $item->rowId) }}" method="POST">
+                                    <form action="{{ route('cart.remove', $item->rowId) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja remover esse item?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"><i>Delete</i></button>
@@ -85,7 +85,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <form action="{{ route('cart.clear', $item->rowId) }}" method="POST">
+                    <form action="{{ route('cart.clear', $item->rowId) }}" method="POST" onsubmit="return confirm('Essa ação removerá todos os itens do seu carrinho! Tem certeza disso?')">
                         @csrf
                         @method('DELETE') 
                         <button type="submit" href="#">Limpar Carrinho</button>

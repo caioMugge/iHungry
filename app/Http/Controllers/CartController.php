@@ -17,7 +17,7 @@ class CartController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'produto_id' => 'required|integer',
+            'produto_id' => 'required|integer|exists:produtos,produto_id',
             'quantidade' => 'required|integer|min:1', 
         ]);
 
@@ -27,10 +27,11 @@ class CartController extends Controller
 
         Cart::instance('cart')->add(
             $produto->produto_id, 
-            $produto->nome_produto, 
+            // $produto->nome_produto, 
             (int) $request->quantidade, 
-            $produto->preco
-        )->associate(Produto::class); 
+            // $produto->preco
+        );
+        // ->associate(Produto::class); 
         return back()->with('success', 'Produto inserido no carrinho com sucesso!');
     }
 
@@ -44,15 +45,21 @@ class CartController extends Controller
         $cart = Cart::instance('cart');
         $item = $cart->get($request->rowId);
 
+        if (!$item) {
+            return back()->with('error', 'Item não encontrado no carrinho.');
+        }
+
         $quantidade = $request->acao === 'aumentar'
             ? $item->quantidade + 1
             : max(1, $item->quantidade - 1);
 
-        Cart::instance('cart')->update(
-            $request->rowId, 
-            // (int) $request->quantidade);
-            $quantidade,
-        );
+        $cart->update($request->rowId, $quantidade);
+
+        // Cart::instance('cart')->update(
+        //     $request->rowId, 
+        //     // (int) $request->quantidade);
+        //     $quantidade,
+        // );  
         return back()->with('success', 'Carrinho atualizado com sucesso!');
     }
 
