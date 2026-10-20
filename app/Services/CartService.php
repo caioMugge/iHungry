@@ -147,4 +147,9 @@ class CartService
     {
         return (int) $this->getCart()->sum('quantidade');
     }
+
+    public function get(string $rowId): ?object
+    {
+        return $this->getCart()->get($rowId);
+    }
 }
