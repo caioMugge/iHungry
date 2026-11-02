@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Produto;
 use Illuminate\Http\Request;
 use App\Models\Categoria;
+use Illuminate\Support\Facades\Storage;
 
 class ProdutoController extends Controller
 {
@@ -82,17 +83,50 @@ class ProdutoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request->merge([
-            'promocao' => $request->has('promocao'),
-            'ativo' => $request->has('ativo'),
+        // $request->merge([
+        //     'promocao' => $request->has('promocao'),
+        //     'ativo' => $request->has('ativo'),
+        // ]);
+
+        // $updated = $this->produto->where('produto_id', $id)->update($request->except(['_token', '_method']));
+        
+        // if ($updated) {
+        //     return redirect()->back()->with('message', 'Atualização concluída!');
+        // }
+        // return redirect()->back()->with('message', 'Atualização falhou!');
+
+        $request->validate([
+            'nome_produto'      => 'required|string',
+            // 'categoria_id'      => 'required|integer',
+            'descricao_produto' => 'nullable|string',
+            'preco'             => 'required|numeric|min:0',
+            'imagem'            => 'nullable|image|max:2048',
         ]);
 
-        $updated = $this->produto->where('produto_id', $id)->update($request->except(['_token', '_method']));
-        
-        if ($updated) {
-            return redirect()->back()->with('message', 'Atualização concluída!');
+        $produto = $this->produto->findOrFail($id);
+
+        $path = [
+            'nome_produto'      => $request->input('nome_produto'),
+            // 'categoria_id'      => $request->input('categoria_id'),
+            'descricao_produto' => $request->input('descricao_produto'),
+            'preco'             => $request->input('preco'),
+            'promocao'          => $request->has('promocao'),
+            'ativo'             => $request->has('ativo'),
+        ];
+
+        if ($request->hasFile('imagem')) {
+        // apaga a imagem antiga, se existir
+            if ($produto->imagem) {
+                Storage::disk('public')->delete($produto->imagem);
+            }
+
+            $file_name = rand(0, 999999) . '-' . $request->file('imagem')->getClientOriginalName();
+            $path['imagem'] = $request->file('imagem')->storeAs('uploads', $file_name, 'public');
         }
-        return redirect()->back()->with('message', 'Atualização falhou!');
+
+        $produto->update($path);
+
+        return redirect()->back()->with('message', 'Atualização concluída!');
     }
 
     /**
