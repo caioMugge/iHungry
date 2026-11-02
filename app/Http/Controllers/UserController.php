@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Facades\Cart;
 
 // use User;
 
@@ -75,11 +76,12 @@ class UserController extends Controller
             });
 
             Auth::login($user); // ADICIONEI ESTA LINHA PARA FAZER O USUARIO FICAR AUTOMATICAMENTE LOGADO AO SE CADASTRAR
+            Cart::instance('cart')->mergeGuestCart();
             return redirect()->route('home')->with('success', 'Usuário cadastrado com sucesso!');
         } catch(\Illuminate\Database\QueryException $e) {
             return back()->withErrors(['erro' => 'Erro ao cadastrar usuário.'])->withInput();
-       
         }
+
 
         
     }

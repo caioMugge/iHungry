@@ -45,6 +45,8 @@ Route::delete('/cart/remove', [CartController::class, 'clear_cart'])->name('cart
 
 
 
+
+
 // VER DEPOIS
 // Route::get('/', function () {
 //     return redirect()->route('login');

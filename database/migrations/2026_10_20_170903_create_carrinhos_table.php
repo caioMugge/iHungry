@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('produto_id');
             $table->string('instance')->default('cart');
             $table->unsignedBigInteger('quantidade')->default(1);
+            $table->timestamp('expires_at')->nullable();
             $table->timestamps();
 
             $table->unique(['user_id', 'produto_id', 'instance']);

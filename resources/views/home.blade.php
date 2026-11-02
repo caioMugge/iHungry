@@ -35,13 +35,21 @@
             <button type="submit">Sair</button>
         </form>
 
-        <a href="{{ route('cart.index') }}">
+        {{-- <a href="{{ route('cart.index') }}">
             <i></i>
             <span>
                 {{ Cart::instance('cart')->count() }}
             </span> Itens no carrinho
-        </a>
+        </a> --}}
+        
     @endauth
+
+    <a href="{{ route('cart.index') }}">
+            <i></i>
+            <span>
+                {{ Cart::instance('cart')->count() }}
+            </span> Itens no carrinho
+    </a>
 </header>
 
 <hr>
@@ -50,6 +58,17 @@
 
 <h2>Confira nossos Produtos</h2>
 {{-- PARTE NOVA --}}
+
+<nav>
+    <a href="{{ route('home') }}">Todos</a>
+
+    @foreach ($categorias as $categoria)
+        <a href="{{ route('home', ['categoria' => $categoria->getKey()]) }}">
+            {{ $categoria->nome_categoria }}
+        </a>
+    @endforeach
+</nav>
+
 @foreach ($produtos as $produto)
     <div class="card mb-3">
         <div class="row g-0">

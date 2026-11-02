@@ -17,4 +17,9 @@ class Produto extends Model
         'promocao',
         'ativo',
     ];
+
+    public function categorias()
+    {
+        return $this->belongsTo(Categoria::class, 'categoria_id');
+    }
 }
