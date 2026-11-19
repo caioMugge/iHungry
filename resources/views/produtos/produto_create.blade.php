@@ -11,6 +11,7 @@
 <form action="{{ route('produtos.store') }}" enctype="multipart/form-data" method="post">
     {{-- FALTA ADICIONAR A PARTE DAS CATEGORIAS --}}
     @csrf
+    <label for="nome_produto">Nome do produto</label>
     <input type="text" name="nome_produto" placeholder="Nome do produto">
     <label for="categoria_id">Categoria:</label>
     <select name="categoria_id" id="categoria_id">

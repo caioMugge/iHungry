@@ -90,6 +90,8 @@
                         @method('DELETE') 
                         <button type="submit" href="#">Limpar Carrinho</button>
                     </form>
+
+                    <a href="{{ route('checkout.index') }}">Finalizar pedido</a>
                 </div>
             </div>
             @endif

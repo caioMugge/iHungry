@@ -13,7 +13,10 @@
     <label for="senha">Senha:</label>
     <input type="password" name="senha" id="senha" required>
 
+    <p>Não possui uma conta? <a href="{{ route('users.create') }}">Crie uma!</a></p>
+
     <button type="submit">Entrar</button>
+
 </form>
 
 @endsection
