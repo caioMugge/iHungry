@@ -28,10 +28,39 @@
     <label for="imagem">Imagem do Produto:</label>
     <input type="file" name="imagem" id="imagem">
     <label for="promocao">Promoção ativa:</label>
-    <input type="checkbox" name="promocao" id="promocao" value="1">
+    <input type="checkbox" name="promocao" id="promocao" value="1" {{ old('promocao', $produto->promocao ?? false) ? 'checked' : '' }}>
+    {{-- PARTE DA PROMOÇÃO --}}
+    <div id="campos-promocao" hidden>
+        <label>
+        <input type="radio" name="tipo_desconto" value="porcentagem"
+            {{ old('tipo_desconto') === 'porcentagem' ? 'checked' : '' }}>
+        Porcentagem (%)
+    </label>
+    <label>
+        <input type="radio" name="tipo_desconto" value="valor"
+            {{ old('tipo_desconto', 'valor') === 'valor' ? 'checked' : '' }}>
+        Novo valor (R$)
+    </label>
+
+    <input type="number" name="desconto" step="0.01" min="0"
+        value="{{ old('desconto', $produto->preco_promocional ?? '') }}">
+    </div>
+
     <label for="ativo">Produto disponível:</label>
-    <input type="checkbox" name="ativo" id="ativo" value="1">
+    <input type="checkbox" name="ativo" id="ativo" value="1" checked>
     <button type="submit">Registrar</button>
 </form>
+
+<script>
+    const chkPromocao = document.getElementById('promocao');
+    const camposPromocao = document.getElementById('campos-promocao');
+
+    function alternarPromocao() {
+        camposPromocao.hidden = !chkPromocao.checked;
+    }
+
+    chkPromocao.addEventListener('change', alternarPromocao);
+    alternarPromocao();
+</script>
 
 @endsection

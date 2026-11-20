@@ -6,6 +6,7 @@ use App\Models\Produto;
 use Illuminate\Http\Request;
 use App\Models\Categoria;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class ProdutoController extends Controller
 {
@@ -37,10 +38,25 @@ class ProdutoController extends Controller
      */
     public function store(Request $request)
     {
-        $request->merge([
-            'promocao' => $request->has('promocao'),
-            'ativo' => $request->has('ativo'),
-        ]);
+        
+         $regrasDesconto = [];
+
+        if ($request->has('promocao')) {
+            $regrasDesconto = [
+                'tipo_desconto' => 'required|in:porcentagem,valor',
+                'desconto'      => $request->input('tipo_desconto') === 'porcentagem'
+                    ? 'required|numeric|min:1|max:99'
+                    : 'required|numeric|gt:0|lt:preco',
+            ];
+        }
+
+        $request->validate(array_merge([
+            'nome_produto'      => 'required|string|max:150',
+            'categoria_id'      => 'required|integer',
+            'descricao_produto' => 'nullable|string',
+            'preco'             => 'required|numeric|min:0',
+            'imagem'            => 'required|image|max:2048',
+        ], $regrasDesconto));
 
         $file_name = rand(0, 999999) . "-" . $request->file('imagem')->getClientOriginalName();
         $path = $request->file('imagem')->storeAs('uploads', $file_name, 'public');
@@ -51,8 +67,9 @@ class ProdutoController extends Controller
                 'descricao_produto' => $request->input('descricao_produto'),
                 'preco' => $request->input('preco'),
                 'imagem' => $path,
-                'promocao' => $request->input('promocao'),
-                'ativo' => $request->input('ativo'),
+                'promocao' => $request->has('promocao'),
+                'ativo' => $request->has('ativo'),
+                'preco_promocional' => $this->calcularPrecoPromocional($request),   
             ]
         );
 
@@ -60,6 +77,30 @@ class ProdutoController extends Controller
             return redirect()->back()->with('message', 'Cadastro de produto concluído!');
         }
         return redirect()->back()->with('message', 'Cadastro de produto falhou!');
+            // PARTE ANTIGA
+        // $request->merge([
+        //     'promocao' => $request->has('promocao'),
+        //     'ativo' => $request->has('ativo'),
+        // ]);
+
+        // $file_name = rand(0, 999999) . "-" . $request->file('imagem')->getClientOriginalName();
+        // $path = $request->file('imagem')->storeAs('uploads', $file_name, 'public');
+
+        // $created = $this->produto->create([
+        //         'nome_produto' => $request->input('nome_produto'),
+        //         'categoria_id' => $request->input('categoria_id'),
+        //         'descricao_produto' => $request->input('descricao_produto'),
+        //         'preco' => $request->input('preco'),
+        //         'imagem' => $path,
+        //         'promocao' => $request->input('promocao'),
+        //         'ativo' => $request->input('ativo'),
+        //     ]
+        // );
+
+        // if ($created) {
+        //     return redirect()->back()->with('message', 'Cadastro de produto concluído!');
+        // }
+        // return redirect()->back()->with('message', 'Cadastro de produto falhou!');
     }
 
     /**
@@ -67,7 +108,17 @@ class ProdutoController extends Controller
      */
     public function show(Produto $produto)
     {
-        return view('produtos.produto_show', ['produto' => $produto]);
+        // return view('produtos.produto_show', ['produto' => $produto]);
+        $admin = Auth::check() && Auth::user()->tipo === 'admin';
+
+        if ($admin) {
+            return view('produtos.produto_show', ['produto' => $produto]);
+        }
+
+        // cliente não vê produto desativado
+        abort_if(!$produto->ativo, 404);
+
+        return view('produtos.produto_detalhe', ['produto' => $produto]);
     }
 
     /**
@@ -83,6 +134,8 @@ class ProdutoController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
+    //PARTE FORA
         // $request->merge([
         //     'promocao' => $request->has('promocao'),
         //     'ativo' => $request->has('ativo'),
@@ -95,13 +148,24 @@ class ProdutoController extends Controller
         // }
         // return redirect()->back()->with('message', 'Atualização falhou!');
 
-        $request->validate([
+        $regrasDesconto = [];
+
+        if ($request->has('promocao')) {
+            $regrasDesconto = [
+                'tipo_desconto' => 'required|in:porcentagem,valor',
+                'desconto'      => $request->input('tipo_desconto') === 'porcentagem'
+                    ? 'required|numeric|min:1|max:99'
+                    : 'required|numeric|gt:0|lt:preco',
+            ];
+        }
+
+        $request->validate(array_merge([
             'nome_produto'      => 'required|string',
             // 'categoria_id'      => 'required|integer',
             'descricao_produto' => 'nullable|string',
             'preco'             => 'required|numeric|min:0',
             'imagem'            => 'nullable|image|max:2048',
-        ]);
+        ], $regrasDesconto));
 
         $produto = $this->produto->findOrFail($id);
 
@@ -112,6 +176,7 @@ class ProdutoController extends Controller
             'preco'             => $request->input('preco'),
             'promocao'          => $request->has('promocao'),
             'ativo'             => $request->has('ativo'),
+            'preco_promocional' => $this->calcularPrecoPromocional($request),
         ];
 
         if ($request->hasFile('imagem')) {
@@ -127,6 +192,41 @@ class ProdutoController extends Controller
         $produto->update($path);
 
         return redirect()->back()->with('message', 'Atualização concluída!');
+
+        // PARTE ANTIGA
+
+        // $request->validate([
+        //     'nome_produto'      => 'required|string',
+        //     // 'categoria_id'      => 'required|integer',
+        //     'descricao_produto' => 'nullable|string',
+        //     'preco'             => 'required|numeric|min:0',
+        //     'imagem'            => 'nullable|image|max:2048',
+        // ]);
+
+        // $produto = $this->produto->findOrFail($id);
+
+        // $path = [
+        //     'nome_produto'      => $request->input('nome_produto'),
+        //     // 'categoria_id'      => $request->input('categoria_id'),
+        //     'descricao_produto' => $request->input('descricao_produto'),
+        //     'preco'             => $request->input('preco'),
+        //     'promocao'          => $request->has('promocao'),
+        //     'ativo'             => $request->has('ativo'),
+        // ];
+
+        // if ($request->hasFile('imagem')) {
+        // // apaga a imagem antiga, se existir
+        //     if ($produto->imagem) {
+        //         Storage::disk('public')->delete($produto->imagem);
+        //     }
+
+        //     $file_name = rand(0, 999999) . '-' . $request->file('imagem')->getClientOriginalName();
+        //     $path['imagem'] = $request->file('imagem')->storeAs('uploads', $file_name, 'public');
+        // }
+
+        // $produto->update($path);
+
+        // return redirect()->back()->with('message', 'Atualização concluída!');
     }
 
     /**
@@ -137,5 +237,21 @@ class ProdutoController extends Controller
         $this->produto->where('produto_id', $id)->delete();
 
         return redirect()->route('produtos.index');
+    }
+
+    private function calcularPrecoPromocional(Request $request): ?float
+    {
+        if (!$request->has('promocao')) {
+            return null;
+        }
+
+        $preco    = (float) $request->input('preco');
+        $desconto = (float) $request->input('desconto');
+
+        $final = $request->input('tipo_desconto') === 'porcentagem'
+            ? $preco * (1 - $desconto / 100)
+            : $desconto;
+
+        return round($final, 2);
     }
 }

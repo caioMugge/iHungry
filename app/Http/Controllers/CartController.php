@@ -21,12 +21,13 @@ class CartController extends Controller
             'quantidade' => 'required|integer|min:1', 
         ]);
 
-        $produto = Produto::findOrFail($request->produto_id);
+        $produto = Produto::where('ativo', true)->findOrFail($request->produto_id);
 
         // dd($produto->only(['produto_id', 'nome_produto', 'preco']));
 
         Cart::instance('cart')->add(
             $produto->produto_id, 
+            // (float) $produto->preco_final,
             // $produto->nome_produto, 
             (int) $request->quantidade, 
             // $produto->preco

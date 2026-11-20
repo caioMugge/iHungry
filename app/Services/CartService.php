@@ -157,7 +157,7 @@ class CartService
             ->get()
             ->mapWithKeys(function ($produto) use ($quantidades) {
                 $quantidade = (int) $quantidades[$produto->produto_id];
-                $preco = (float) $produto->preco;
+                $preco = (float) $produto->preco_final;
 
                 return [(string) $produto->produto_id => (object) [
                     'rowId'      => (string) $produto->produto_id,

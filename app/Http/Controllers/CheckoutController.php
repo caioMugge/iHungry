@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Facades\Cart;
 use App\Models\Pedido;
+use App\Models\Produto;
 use App\Models\Item_pedido;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -69,12 +70,24 @@ class CheckoutController extends Controller
             return redirect()->route('checkout.index');
         }
 
+         $ids = $cart->content()->pluck('id');
+
+        $disponiveis = Produto::whereIn('produto_id', $ids)
+            ->where('ativo', true)
+            ->count();
+
+        if ($disponiveis !== $ids->unique()->count()) {
+            return redirect()->route('cart.index')
+                ->withErrors(['carrinho' => 'Um ou mais produtos do carrinho não estão mais disponíveis. Remova-os para continuar.']);
+        }
+
         $pedido = DB::transaction(function () use ($cart, $metodo) {
             $pedido = Pedido::create([
                 'user_id' => Auth::id(),
                 'endereco_id' => Auth::user()->endereco_id,
                 'data_pedido' => now(),
-                'status' => 'pendente',
+                // 'status' => 'pendente',
+                'status' => Pedido::EM_PREPARO,
                 'valor_total' => $cart->total(),
                 'forma_pagamento' => $metodo,
             ]);

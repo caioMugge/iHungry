@@ -2,63 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pedido;
 use Illuminate\Http\Request;
 
 class PedidoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $pedidos = Pedido::where('user_id', $request->user()->getKey())
+            ->latest('data_pedido')
+            ->get();
+
+        return view('pedidos.index', compact('pedidos'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show(Request $request, Pedido $pedido)
     {
-        //
+        abort_unless($pedido->user_id === $request->user()->getKey(), 403);
+
+        $pedido->load('itens.produto');
+
+        return view('pedidos.show', compact('pedido'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function entregue(Request $request, Pedido $pedido)
     {
-        //
-    }
+        abort_unless($pedido->user_id === $request->user()->getKey(), 403);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        if ($pedido->status !== Pedido::SAIU_PARA_ENTREGA) {
+            return back()->withErrors(['pedido' => 'Este pedido ainda não saiu para entrega.']);
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        $pedido->update(['status' => Pedido::ENTREGUE]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return back()->with('success', 'Obrigado! Entrega confirmada.');
     }
 }

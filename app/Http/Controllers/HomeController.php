@@ -17,7 +17,7 @@ class HomeController extends Controller
         // return view('home', compact('produtos'));
 
         $categorias = Categoria::all();
-        $produtos = Produto::query()->when($request->filled('categoria'), function ($query) use ($request){
+        $produtos = Produto::query()->where('ativo', true)->when($request->filled('categoria'), function ($query) use ($request){
             $query->where('categoria_id', $request->categoria);
         })->get();
 

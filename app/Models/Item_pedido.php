@@ -16,4 +16,14 @@ class Item_pedido extends Model
         'preco_unitario',
         'subtotal',
     ];
+
+     public function produto()
+    {
+        return $this->belongsTo(Produto::class, 'produto_id', 'produto_id');
+    }
+
+    public function pedido()
+    {
+        return $this->belongsTo(Pedido::class, 'pedido_id', 'pedido_id');
+    }
 }

@@ -41,6 +41,12 @@
                 {{ Cart::instance('cart')->count() }}
             </span> Itens no carrinho
         </a> --}}
+
+         <a href="{{ route('pedidos.index') }}">Meus pedidos</a>
+
+        @if (auth()->user()->tipo === 'admin')
+            <a href="{{ route('admin.pedidos.index') }}">Pedidos (admin)</a>
+        @endif
         
     @endauth
 
@@ -83,7 +89,10 @@
             </div>
             <div class="col-md-2">
                 <div class="card-body">
-                    <p class="card-text">{{ $produto->preco }}</p>
+                    {{-- <p class="card-text">{{ $produto->preco }}</p> --}}
+                    <div class="card-text">
+                        @include('produtos._preco', ['produto' => $produto])
+                    </div>
 
                     {{-- NOVO --}}
                     <form action="{{ route('cart.add') }}" method="POST">

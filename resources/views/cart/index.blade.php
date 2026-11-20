@@ -54,7 +54,8 @@
                                 <td data-label="Produto">
                                     <h6><a href="{{ route('produtos.show', $produto) }}">{{ $item->nome }}</a></h6>
                                     <div>
-                                        <span>R${{ number_format($item->preco, 2, ',', '.') }}</span>
+                                        {{-- <span>R${{ number_format($item->preco, 2, ',', '.') }}</span> --}}
+                                        @include('produtos._preco', ['produto' => $item->model])
                                     </div>
                                 </td>
                                 <td>
