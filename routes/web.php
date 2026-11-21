@@ -10,6 +10,7 @@ use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AvaliacaoController;
 
 // HOME (publica)
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -58,14 +59,16 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 Route::get('/produtos/{produto}', [ProdutoController::class, 'show'])->name('produtos.show');
 
 // CARRINHO
-Route::post('/cart/add', [CartController::class, 'add_to_cart'])->name('cart.add');
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::put('/cart/update', [CartController::class, 'update_cart'])->name('cart.update');
-Route::delete('/cart/remove/{rowId}', [CartController::class, 'remove_from_cart'])->name('cart.remove');
-Route::delete('/cart/remove', [CartController::class, 'clear_cart'])->name('cart.clear');
+Route::middleware('cliente')->group(function () {
+    Route::post('/cart/add', [CartController::class, 'add_to_cart'])->name('cart.add');
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::put('/cart/update', [CartController::class, 'update_cart'])->name('cart.update');
+    Route::delete('/cart/remove/{rowId}', [CartController::class, 'remove_from_cart'])->name('cart.remove');
+    Route::delete('/cart/remove', [CartController::class, 'clear_cart'])->name('cart.clear');
+});
 
 // PAGAMENTO
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'cliente'])->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'escolher'])->name('checkout.escolher');
     Route::get('/checkout/pagamento', [CheckoutController::class, 'pagamento'])->name('checkout.pagamento');
@@ -77,6 +80,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/pedidos/{pedido}', [PedidoController::class, 'show'])->name('pedidos.show');
     Route::patch('/pedidos/{pedido}/entregue', [PedidoController::class, 'entregue'])->name('pedidos.entregue');
 });
+
+// AVALIAÇÃO
+Route::post('/itens/{item}/avaliar', [AvaliacaoController::class, 'store'])->name('avaliacoes.store');
 
 
 

@@ -33,6 +33,33 @@
         <li>
             {{ $item->quantidade }}x {{ $item->produto?->nome_produto ?? 'Produto removido' }}
             - R$ {{ number_format($item->subtotal, 2, ',', '.') }}
+
+            {{-- avaliação --}}
+            @if ($pedido->status === 'entregue')
+                @if ($item->avaliacao)
+                    <p>
+                        Sua avaliação:
+                        {{ str_repeat('★', $item->avaliacao->nota) }}{{ str_repeat('☆', 5 - $item->avaliacao->nota) }}
+                    </p>
+                    @if ($item->avaliacao->comentario)
+                        <p>"{{ $item->avaliacao->comentario }}"</p>
+                    @endif
+                @else
+                    <form action="{{ route('avaliacoes.store', $item->item_id) }}" method="POST">
+                        @csrf
+                        <p>Avalie este produto:</p>
+                        @for ($n = 1; $n <= 5; $n++)
+                            <label>
+                                <input type="radio" name="nota" value="{{ $n }}" required>
+                                {{ $n }} ★
+                            </label>
+                        @endfor
+                        <br>
+                        <textarea name="comentario" maxlength="500" placeholder="Comentário (opcional)"></textarea>
+                        <button type="submit">Enviar avaliação</button>
+                    </form>
+                @endif
+            @endif
         </li>
     @endforeach
 </ul>

@@ -111,14 +111,22 @@ class ProdutoController extends Controller
         // return view('produtos.produto_show', ['produto' => $produto]);
         $admin = Auth::check() && Auth::user()->tipo === 'admin';
 
+        $produto->loadAvg('avaliacoes', 'nota')->loadCount('avaliacoes');
+
         if ($admin) {
-            return view('produtos.produto_show', ['produto' => $produto]);
+            $avaliacoes = $produto->avaliacoes()->with('user')->latest()->get();
+            return view('produtos.produto_show', compact('produto', 'avaliacoes'));
         }
 
         // cliente não vê produto desativado
         abort_if(!$produto->ativo, 404);
 
-        return view('produtos.produto_detalhe', ['produto' => $produto]);
+        $produto->loadAvg('avaliacoes', 'nota')->loadCount('avaliacoes');
+        $avaliacoes = $produto->avaliacoes()->with('user')->latest()->get();
+
+        // return view('produtos.produto_detalhe', ['produto' => $produto]);
+        // return view('produtos.produto_detalhe', compact('produto', 'avaliacoes'));
+        return view('produtos.produto_detalhe', compact('produto'));
     }
 
     /**

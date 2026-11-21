@@ -21,13 +21,21 @@
     @guest
         <a href="{{ route('users.create') }}">Cadastrar</a>
         <a href="{{ route('login') }}">Login</a>
+        <a href="{{ route('cart.index') }}">Carrinho ({{ Cart::instance('cart')->count() }})</a>
     @endguest
 
     @auth
         <span>Olá, {{ auth()->user()->nome_usuario }}</span>
 
-        @if(auth()->user()->tipo === 'admin')
+        {{-- @if(auth()->user()->tipo === 'admin')
             <a href="{{ route('produtos.index') }}">Listar Produtos - específico</a>
+        @endif --}}
+        @if (auth()->user()->isAdmin())
+            <a href="{{ route('produtos.index') }}">Listar Produtos - específico</a>
+            <a href="{{ route('admin.pedidos.index') }}">Pedidos (admin)</a>
+        @else
+            <a href="{{ route('cart.index') }}">Carrinho ({{ Cart::instance('cart')->count() }})</a>
+            <a href="{{ route('pedidos.index') }}">Meus pedidos</a>
         @endif
 
         <form action="{{ route('logout') }}" method="POST">
@@ -42,20 +50,23 @@
             </span> Itens no carrinho
         </a> --}}
 
-         <a href="{{ route('pedidos.index') }}">Meus pedidos</a>
+         {{-- <a href="{{ route('pedidos.index') }}">Meus pedidos</a> --}}
 
         @if (auth()->user()->tipo === 'admin')
             <a href="{{ route('admin.pedidos.index') }}">Pedidos (admin)</a>
         @endif
         
     @endauth
-
-    <a href="{{ route('cart.index') }}">
+     {{--
+    @if (!auth()->check() || !auth()->user()->isAdmin())
+        <a href="{{ route('cart.index') }}">Carrinho ({{ Cart::instance('cart')->count() }})</a>
+    @endif
+    {{-- <a href="{{ route('cart.index') }}">
             <i></i>
             <span>
                 {{ Cart::instance('cart')->count() }}
             </span> Itens no carrinho
-    </a>
+    </a> --}} 
 </header>
 
 <hr>
@@ -73,7 +84,18 @@
             {{ $categoria->nome_categoria }}
         </a>
     @endforeach
+
+    @if ($temInativos)
+        <a href="{{ route('home', ['filtro' => 'inativos']) }}">Inativos</a>
+    @endif
 </nav>
+
+@if ($soInativos)
+    <h3>Produtos inativos</h3>
+    @if ($produtos->isEmpty())
+        <p>Nenhum produto inativo.</p>
+    @endif
+@endif
 
 @foreach ($produtos as $produto)
     <div class="card mb-3">
@@ -93,6 +115,10 @@
                     <div class="card-text">
                         @include('produtos._preco', ['produto' => $produto])
                     </div>
+                    <div>
+                        @include('produtos._nota', ['produto' => $produto])
+                    </div>
+                    
 
                     {{-- NOVO --}}
                     <form action="{{ route('cart.add') }}" method="POST">

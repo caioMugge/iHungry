@@ -57,4 +57,9 @@ class Produto extends Model
                 : 0
         );
     }
+
+    public function avaliacoes()
+    {
+        return $this->hasMany(Avaliacao::class, 'produto_id', 'produto_id');
+    }
 }

@@ -15,6 +15,9 @@
     <button type="submit">Adicionar ao carrinho</button>
 </form>
 
+<h3>Avaliações</h3>
+@include('produtos._nota', ['produto' => $produto])
+
 <a href="{{ route('home') }}">Voltar</a>
 
 @endsection

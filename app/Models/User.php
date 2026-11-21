@@ -29,6 +29,11 @@ class User extends Authenticatable
         return $this->senha;
     }
 
+    public function isAdmin(): bool
+    {
+        return $this->tipo === 'admin';
+    }
+
     // public function enderecos()
     // {
     //     return $this->hasMany(Endereco::class);

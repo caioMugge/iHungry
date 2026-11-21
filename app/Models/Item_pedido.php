@@ -22,6 +22,11 @@ class Item_pedido extends Model
         return $this->belongsTo(Produto::class, 'produto_id', 'produto_id');
     }
 
+    public function avaliacao()
+    {
+        return $this->hasOne(Avaliacao::class, 'item_id', 'item_id');
+    }
+
     public function pedido()
     {
         return $this->belongsTo(Pedido::class, 'pedido_id', 'pedido_id');

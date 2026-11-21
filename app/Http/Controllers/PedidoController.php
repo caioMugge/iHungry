@@ -20,7 +20,8 @@ class PedidoController extends Controller
     {
         abort_unless($pedido->user_id === $request->user()->getKey(), 403);
 
-        $pedido->load('itens.produto');
+        // $pedido->load('itens.produto');
+        $pedido->load('itens.produto', 'itens.avaliacao');
 
         return view('pedidos.show', compact('pedido'));
     }

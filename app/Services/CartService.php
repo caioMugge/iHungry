@@ -261,7 +261,7 @@ class CartService
 
      public function mergeGuestCart(): void
     {
-        if (!Auth::check()) {
+        if (!Auth::check() || Auth::user()->isAdmin()) {
             return;
         }
 
